@@ -1,9 +1,23 @@
-// Sets up the Express app to handle data parsing
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
+// Set up MySQL connection.
+const mysql = require('mysql');
 
+const connection = mysql.createConnection({
+  host: 'localhost',
+  port: 3306,
+  user: 'root',
+  // NOTE: Be sure to add your MySQL password here!
+  password: 'Revolution94!',
+  database: 'burgers_db',
+});
 
+// Make connection.
+connection.connect((err) => {
+  if (err) {
+    console.error(`error connecting: ${err.stack}`);
+    return;
+  }
+  console.log(`connected as id ${connection.threadId}`);
+});
 
-// Starts the server to begin listening
-// =============================================================
-app.listen(PORT, () => console.log(`Listening on PORT ${PORT}`));
+// Export connection for our ORM to use.
+module.exports = connection;
